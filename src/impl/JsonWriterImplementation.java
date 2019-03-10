@@ -119,23 +119,51 @@ public class JsonWriterImplementation implements JsonWriter {
 		StringBuilder stringBuilder = new StringBuilder();
 		for (int index = 0; index < string.length(); ++index) {
 			char character = string.charAt(index);
-			switch (character) {
-			case '\"':
-				stringBuilder.append("\\\"");
-			case '\\':
-				stringBuilder.append("\\\\");
-			case '/':
-				stringBuilder.append("\\/");
-			case '\b':
-				stringBuilder.append("\\b");
-			case '\f':
-				stringBuilder.append("\\f");
-			case '\n':
-				stringBuilder.append("\\n");
-			case '\r':
-				stringBuilder.append("\\r");
-			case '\t':
-				stringBuilder.append("\\t");
+			if(0x00 <= character && character < 0x20) {
+				stringBuilder.append('\\');
+				stringBuilder.append('u');
+				stringBuilder.append('0');
+				stringBuilder.append('0');
+				stringBuilder.append(Integer.toHexString(character >>> 4));
+				stringBuilder.append(Integer.toHexString(character & 0b1111));
+			} else {
+				switch (character) {
+				case '\"':
+					stringBuilder.append('\\');
+					stringBuilder.append('\"');
+					break;
+				case '\\':
+					stringBuilder.append('\\');
+					stringBuilder.append('\\');
+					break;
+				case '/':
+					stringBuilder.append('\\');
+					stringBuilder.append('/');
+					break;
+				case '\b':
+					stringBuilder.append('\\');
+					stringBuilder.append('b');
+					break;
+				case '\f':
+					stringBuilder.append('\\');
+					stringBuilder.append('f');
+					break;
+				case '\n':
+					stringBuilder.append('\\');
+					stringBuilder.append('n');
+					break;
+				case '\r':
+					stringBuilder.append('\\');
+					stringBuilder.append('f');
+					break;
+				case '\t':
+					stringBuilder.append('\\');
+					stringBuilder.append('t');
+					break;
+				default:
+					stringBuilder.append(character);
+					break;
+				}
 			}
 		}
 		return stringBuilder.toString();
