@@ -104,13 +104,19 @@ public class JsonImplementation implements Json {
 			switch (this.value.getClass().getName()) {
 			case "java.lang.String":
 				return resultClass.cast(Boolean.parseBoolean((String) this.value));
+			case "java.lang.Byte":
+			case "java.lang.Short":
+			case "java.lang.Integer":
+			case "java.lang.Long":
+			case "java.lang.Float":
+			case "java.lang.Double":
 			case "java.math.BigInteger":
 			case "java.math.BigDecimal":
 				return resultClass.cast(((Number) this.value).doubleValue() == 0.0d);
 			case "java.lang.Boolean":
 				return resultClass.cast((Boolean) this.value);
 			default:
-				throw new ClassCastException();
+				return resultClass.cast(this.value);
 			}
 		case "byte":
 			// Avoids errors when dealing with primitives
@@ -119,13 +125,19 @@ public class JsonImplementation implements Json {
 			switch (this.value.getClass().getName()) {
 			case "java.lang.String":
 				return resultClass.cast(Byte.parseByte((String) this.value));
+			case "java.lang.Byte":
+			case "java.lang.Short":
+			case "java.lang.Integer":
+			case "java.lang.Long":
+			case "java.lang.Float":
+			case "java.lang.Double":
 			case "java.math.BigInteger":
 			case "java.math.BigDecimal":
 				return resultClass.cast(((Number) this.value).byteValue());
 			case "java.lang.Boolean":
 				return resultClass.cast(((Boolean) this.value) ? new Byte((byte) 1) : new Byte((byte) 0));
 			default:
-				throw new ClassCastException();
+				return resultClass.cast(this.value);
 			}
 		case "short":
 			// Avoids errors when dealing with primitives
@@ -134,13 +146,19 @@ public class JsonImplementation implements Json {
 			switch (this.value.getClass().getName()) {
 			case "java.lang.String":
 				return resultClass.cast(Short.parseShort((String) this.value));
+			case "java.lang.Byte":
+			case "java.lang.Short":
+			case "java.lang.Integer":
+			case "java.lang.Long":
+			case "java.lang.Float":
+			case "java.lang.Double":
 			case "java.math.BigInteger":
 			case "java.math.BigDecimal":
 				return resultClass.cast(((Number) this.value).shortValue());
 			case "java.lang.Boolean":
 				return resultClass.cast(((Boolean) this.value) ? new Short((short) 1) : new Short((short) 0));
 			default:
-				throw new ClassCastException();
+				return resultClass.cast(this.value);
 			}
 		case "int":
 			// Avoids errors when dealing with primitives
@@ -149,13 +167,19 @@ public class JsonImplementation implements Json {
 			switch (this.value.getClass().getName()) {
 			case "java.lang.String":
 				return resultClass.cast(Integer.parseInt((String) this.value));
+			case "java.lang.Byte":
+			case "java.lang.Short":
+			case "java.lang.Integer":
+			case "java.lang.Long":
+			case "java.lang.Float":
+			case "java.lang.Double":
 			case "java.math.BigInteger":
 			case "java.math.BigDecimal":
 				return resultClass.cast(((Number) this.value).intValue());
 			case "java.lang.Boolean":
 				return resultClass.cast(((Boolean) this.value) ? new Integer(1) : new Integer(0));
 			default:
-				throw new ClassCastException();
+				return resultClass.cast(this.value);
 			}
 		case "long":
 			// Avoids errors when dealing with primitives
@@ -164,13 +188,19 @@ public class JsonImplementation implements Json {
 			switch (this.value.getClass().getName()) {
 			case "java.lang.String":
 				return resultClass.cast(Long.parseLong((String) this.value));
+			case "java.lang.Byte":
+			case "java.lang.Short":
+			case "java.lang.Integer":
+			case "java.lang.Long":
+			case "java.lang.Float":
+			case "java.lang.Double":
 			case "java.math.BigInteger":
 			case "java.math.BigDecimal":
 				return resultClass.cast(((Number) this.value).longValue());
 			case "java.lang.Boolean":
 				return resultClass.cast(((Boolean) this.value) ? new Long(1L) : new Long(0L));
 			default:
-				throw new ClassCastException();
+				return resultClass.cast(this.value);
 			}
 		case "float":
 			// Avoids errors when dealing with primitives
@@ -179,13 +209,19 @@ public class JsonImplementation implements Json {
 			switch (this.value.getClass().getName()) {
 			case "java.lang.String":
 				return resultClass.cast(Float.parseFloat((String) this.value));
+			case "java.lang.Byte":
+			case "java.lang.Short":
+			case "java.lang.Integer":
+			case "java.lang.Long":
+			case "java.lang.Float":
+			case "java.lang.Double":
 			case "java.math.BigInteger":
 			case "java.math.BigDecimal":
 				return resultClass.cast(((Number) this.value).floatValue());
 			case "java.lang.Boolean":
 				return resultClass.cast(((Boolean) this.value) ? new Float(1.0) : new Float(0.0));
 			default:
-				throw new ClassCastException();
+				return resultClass.cast(this.value);
 			}
 		case "double":
 			// Avoids errors when dealing with primitives
@@ -194,42 +230,68 @@ public class JsonImplementation implements Json {
 			switch (this.value.getClass().getName()) {
 			case "java.lang.String":
 				return resultClass.cast(Double.parseDouble((String) this.value));
+			case "java.lang.Byte":
+			case "java.lang.Short":
+			case "java.lang.Integer":
+			case "java.lang.Long":
+			case "java.lang.Float":
+			case "java.lang.Double":
 			case "java.math.BigInteger":
 			case "java.math.BigDecimal":
 				return resultClass.cast(((Number) this.value).doubleValue());
 			case "java.lang.Boolean":
 				return resultClass.cast(((Boolean) this.value) ? new Double(1.0d) : new Double(0.0d));
 			default:
-				throw new ClassCastException();
+				return resultClass.cast(this.value);
 			}
 		case "java.util.concurrent.atomic.AtomicInteger":
 			switch (this.value.getClass().getName()) {
 			case "java.lang.String":
 				return resultClass.cast(new AtomicInteger(Integer.parseInt((String) this.value)));
+			case "java.lang.Byte":
+			case "java.lang.Short":
+			case "java.lang.Integer":
+			case "java.lang.Long":
+			case "java.lang.Float":
+			case "java.lang.Double":
 			case "java.math.BigInteger":
 			case "java.math.BigDecimal":
 				return resultClass.cast(new AtomicInteger(((Number) this.value).intValue()));
 			case "java.lang.Boolean":
 				return resultClass.cast(((Boolean) this.value) ? new AtomicInteger(1) : new AtomicInteger(0));
 			default:
-				throw new ClassCastException();
+				return resultClass.cast(this.value);
 			}
 		case "java.util.concurrent.atomic.AtomicLong":
 			switch (this.value.getClass().getName()) {
 			case "java.lang.String":
 				return resultClass.cast(new AtomicLong(Long.parseLong((String) this.value)));
+			case "java.lang.Byte":
+			case "java.lang.Short":
+			case "java.lang.Integer":
+			case "java.lang.Long":
+			case "java.lang.Float":
+			case "java.lang.Double":
 			case "java.math.BigInteger":
 			case "java.math.BigDecimal":
 				return resultClass.cast(new AtomicLong(((Number) this.value).longValue()));
 			case "java.lang.Boolean":
 				return resultClass.cast(((Boolean) this.value) ? new AtomicLong(1L) : new AtomicLong(0L));
 			default:
-				throw new ClassCastException();
+				return resultClass.cast(this.value);
 			}
 		case "java.math.BigInteger":
 			switch (this.value.getClass().getName()) {
 			case "java.lang.String":
 				return resultClass.cast(new BigInteger((String) this.value));
+			case "java.lang.Byte":
+			case "java.lang.Short":
+			case "java.lang.Integer":
+			case "java.lang.Long":
+				return resultClass.cast(BigInteger.valueOf((((Number) this.value).longValue())));
+			case "java.lang.Float":
+			case "java.lang.Double":
+				return resultClass.cast(BigDecimal.valueOf((((Number) this.value).longValue())).toBigInteger());
 			case "java.math.BigInteger":
 				return resultClass.cast((BigInteger) this.value);
 			case "java.math.BigDecimal":
@@ -237,12 +299,19 @@ public class JsonImplementation implements Json {
 			case "java.lang.Boolean":
 				return resultClass.cast(((Boolean) this.value) ? BigInteger.ONE : BigInteger.ZERO);
 			default:
-				throw new ClassCastException();
+				return resultClass.cast(this.value);
 			}
 		case "java.math.BigDecimal":
 			switch (this.value.getClass().getName()) {
 			case "java.lang.String":
 				return resultClass.cast(new BigDecimal((String) this.value));
+			case "java.lang.Byte":
+			case "java.lang.Short":
+			case "java.lang.Integer":
+			case "java.lang.Long":
+			case "java.lang.Float":
+			case "java.lang.Double":
+				return resultClass.cast(BigDecimal.valueOf((((Number) this.value).doubleValue())));
 			case "java.math.BigInteger":
 				return resultClass.cast(new BigDecimal((BigInteger) this.value));
 			case "java.math.BigDecimal":
@@ -250,21 +319,26 @@ public class JsonImplementation implements Json {
 			case "java.lang.Boolean":
 				return resultClass.cast(((Boolean) this.value) ? BigDecimal.ONE : BigDecimal.ZERO);
 			default:
-				throw new ClassCastException();
+				return resultClass.cast(this.value);
 			}
 		case "java.lang.Number":
 			switch (this.value.getClass().getName()) {
 			case "java.lang.String":
 				// If the class is just Number, use BigDecimal
 				return resultClass.cast(new BigDecimal((String) this.value));
+			case "java.lang.Byte":
+			case "java.lang.Short":
+			case "java.lang.Integer":
+			case "java.lang.Long":
+			case "java.lang.Float":
+			case "java.lang.Double":
 			case "java.math.BigInteger":
-				return resultClass.cast((BigInteger) this.value);
 			case "java.math.BigDecimal":
-				return resultClass.cast((BigDecimal) this.value);
+				return resultClass.cast((Number) this.value);
 			case "java.lang.Boolean":
 				return resultClass.cast(((Boolean) this.value) ? BigDecimal.ONE : BigDecimal.ZERO);
 			default:
-				throw new ClassCastException();
+				return resultClass.cast(this.value);
 			}
 		case "char":
 			// Avoids errors when dealing with primitives
@@ -276,7 +350,7 @@ public class JsonImplementation implements Json {
 			case "java.lang.Boolean":
 				return resultClass.cast(((Boolean) this.value) ? new Character('t') : new Character('f'));
 			default:
-				throw new ClassCastException();
+				return resultClass.cast(this.value);
 			}
 		case "java.lang.CharSequence":
 			// If the class is just Number, use String
@@ -284,14 +358,19 @@ public class JsonImplementation implements Json {
 			switch (this.value.getClass().getName()) {
 			case "java.lang.String":
 				return resultClass.cast((String) this.value);
+			case "java.lang.Byte":
+			case "java.lang.Short":
+			case "java.lang.Integer":
+			case "java.lang.Long":
+			case "java.lang.Float":
+			case "java.lang.Double":
 			case "java.math.BigInteger":
-				return resultClass.cast(((BigInteger) this.value).toString());
 			case "java.math.BigDecimal":
-				return resultClass.cast(((BigDecimal) this.value).toString());
+				return resultClass.cast(((Number) this.value).toString());
 			case "java.lang.Boolean":
 				return resultClass.cast(((Boolean) this.value) ? "true" : "false");
 			default:
-				throw new ClassCastException();
+				return resultClass.cast(this.value);
 			}
 		case "void":
 			// If the class is void, return null
@@ -300,7 +379,7 @@ public class JsonImplementation implements Json {
 			// If the class is null, return null
 			return null;
 		default:
-			throw new ClassCastException();
+			return resultClass.cast(this.value);
 		}
 	}
 
@@ -317,7 +396,7 @@ public class JsonImplementation implements Json {
 				List<JsonImplementation> list = (List<JsonImplementation>) current.value;
 				current = list.get(Integer.parseInt(key));
 			} else {
-				throw new ClassCastException();// TODO
+				throw new ClassCastException("JSON value is not an object or an array");
 			}
 		}
 		return current;
@@ -337,7 +416,7 @@ public class JsonImplementation implements Json {
 			}
 			return keySet;
 		} else {
-			throw new ClassCastException();// TODO
+			throw new ClassCastException("JSON value is not an object or an array");
 		}
 	}
 
@@ -351,7 +430,7 @@ public class JsonImplementation implements Json {
 			List<Json> list = (List<Json>) value;
 			return list;
 		} else {
-			throw new ClassCastException();// TODO
+			throw new ClassCastException("JSON value is not an object or an array");
 		}
 	}
 
