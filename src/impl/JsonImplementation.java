@@ -291,7 +291,7 @@ public class JsonImplementation implements Json {
 				return resultClass.cast(BigInteger.valueOf((((Number) this.value).longValue())));
 			case "java.lang.Float":
 			case "java.lang.Double":
-				return resultClass.cast(BigDecimal.valueOf((((Number) this.value).longValue())).toBigInteger());
+				return resultClass.cast(BigDecimal.valueOf((((Number) this.value).doubleValue())).toBigInteger());
 			case "java.math.BigInteger":
 				return resultClass.cast((BigInteger) this.value);
 			case "java.math.BigDecimal":
