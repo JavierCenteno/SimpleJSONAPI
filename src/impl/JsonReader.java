@@ -183,47 +183,6 @@ public class JsonReader {
 	}
 
 	/**
-	 * Reads the next JSON value.
-	 * 
-	 * @return The next JSON value.
-	 * @throws IllegalArgumentException
-	 *                                      If an unexpected character is found.
-	 * @throws IOException
-	 *                                      If the Reader fails.
-	 */
-	public Json readValue() throws IOException {
-		consumeWhitespace();
-		switch (peek()) {
-		case '{':
-			return readObject();
-		case '[':
-			return readArray();
-		case '\"':
-			return new JsonImplementation(readString());
-		case 't':
-			return readTrue();
-		case 'f':
-			return readFalse();
-		case 'n':
-			return readNull();
-		case '0':
-		case '1':
-		case '2':
-		case '3':
-		case '4':
-		case '5':
-		case '6':
-		case '7':
-		case '8':
-		case '9':
-		case '-':
-			return readNumber();
-		default:
-			throw unexpectedCharacter("\'{\', \'[\', \'t\', \'f\', \'n\', \'-\' or DIGIT");
-		}
-	}
-
-	/**
 	 * Reads the next JSON object.
 	 * 
 	 * @return The next JSON object.
@@ -456,6 +415,81 @@ public class JsonReader {
 		check('l');
 		check('l');
 		return new JsonImplementation(null);
+	}
+
+	/**
+	 * Reads the next JSON value.
+	 * 
+	 * @return The next JSON value.
+	 * @throws IllegalArgumentException
+	 *                                      If an unexpected character is found.
+	 * @throws IOException
+	 *                                      If the Reader fails.
+	 */
+	private Json readValue() throws IOException {
+		consumeWhitespace();
+		switch (peek()) {
+		case '{':
+			return readObject();
+		case '[':
+			return readArray();
+		case '\"':
+			return new JsonImplementation(readString());
+		case 't':
+			return readTrue();
+		case 'f':
+			return readFalse();
+		case 'n':
+			return readNull();
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+		case '-':
+			return readNumber();
+		default:
+			throw unexpectedCharacter("\'{\', \'[\', \'t\', \'f\', \'n\', \'-\' or DIGIT");
+		}
+	}
+
+	/**
+	 * Reads the next JSON structure.
+	 * 
+	 * @return The next JSON structure.
+	 * @throws IllegalArgumentException
+	 *                                      If an unexpected character is found.
+	 * @throws IOException
+	 *                                      If the Reader fails.
+	 */
+	private Json readStructure() throws IOException {
+		consumeWhitespace();
+		switch (peek()) {
+		case '{':
+			return readObject();
+		case '[':
+			return readArray();
+		default:
+			throw unexpectedCharacter("not \'{\' or \'[\'");
+		}
+	}
+
+	/**
+	 * Reads the next JSON structure.
+	 * 
+	 * @return The next JSON structure.
+	 * @throws IllegalArgumentException
+	 *                                      If an unexpected character is found.
+	 * @throws IOException
+	 *                                      If the Reader fails.
+	 */
+	public Json read() throws IOException {
+		return readStructure();
 	}
 
 }
