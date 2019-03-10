@@ -4,8 +4,7 @@ import java.util.Collection;
 import java.util.Set;
 
 /**
- * This interface offers methods to interact with JSON data. It represents a
- * JSON value.
+ * Represents a JSON value.
  * 
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0

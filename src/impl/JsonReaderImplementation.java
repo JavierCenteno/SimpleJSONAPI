@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import api.Json;
+import api.JsonReader;
 
 /**
  * A Reader to read JSON values from a Stream.
@@ -23,7 +24,7 @@ import api.Json;
  * @since 1.0
  * 
  */
-public class JsonReader {
+public class JsonReaderImplementation implements JsonReader {
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
@@ -54,9 +55,9 @@ public class JsonReader {
 	 * @param reader
 	 *                   A Reader to read JSON data from.
 	 * @throws IOException
-	 *                         If the Reader fails upon reading the first character.
+	 *                         If an I/O error occurs.
 	 */
-	public JsonReader(Reader reader) throws IOException {
+	public JsonReaderImplementation(Reader reader) throws IOException {
 		this.reader = reader;
 		this.current = reader.read();
 		this.row = 1;
@@ -73,10 +74,9 @@ public class JsonReader {
 	 *                        A Charset to interpret the data from the InputStream
 	 *                        as.
 	 * @throws IOException
-	 *                         If the Reader made from the given InputStream fails
-	 *                         upon reading the first character.
+	 *                         If an I/O error occurs.
 	 */
-	public JsonReader(InputStream inputStream, Charset charset) throws IOException {
+	public JsonReaderImplementation(InputStream inputStream, Charset charset) throws IOException {
 		this(new InputStreamReader(inputStream, charset));
 	}
 
@@ -87,10 +87,9 @@ public class JsonReader {
 	 * @param inputStream
 	 *                        An InputStream to read JSON data from.
 	 * @throws IOException
-	 *                         If the Reader made from the given InputStream fails
-	 *                         upon reading the first character.
+	 *                         If an I/O error occurs.
 	 */
-	public JsonReader(InputStream inputStream) throws IOException {
+	public JsonReaderImplementation(InputStream inputStream) throws IOException {
 		this(new InputStreamReader(inputStream));
 	}
 
@@ -100,9 +99,9 @@ public class JsonReader {
 	 * @param string
 	 *                   A String to parse JSON data from.
 	 * @throws IOException
-	 *                         If the Reader fails upon reading the first character.
+	 *                         If an I/O error occurs.
 	 */
-	public JsonReader(String string) throws IOException {
+	public JsonReaderImplementation(String string) throws IOException {
 		this(new ByteArrayInputStream(string.getBytes()));
 	}
 
@@ -133,7 +132,7 @@ public class JsonReader {
 	 *                                      If the current character is not the
 	 *                                      given character.
 	 * @throws IOException
-	 *                                      If the reader fails.
+	 *                                      If an I/O error occurs.
 	 */
 	private void check(int character) throws IOException {
 		if (peek() != character) {
@@ -156,7 +155,7 @@ public class JsonReader {
 	 * 
 	 * @return The current character from the Reader.
 	 * @throws IOException
-	 *                         If the Reader fails.
+	 *                         If an I/O error occurs.
 	 */
 	private int pop() throws IOException {
 		int previous = this.current;
@@ -174,7 +173,7 @@ public class JsonReader {
 	 * Pops for as long as there are whitespace characters.
 	 * 
 	 * @throws IOException
-	 *                         If the Reader fails.
+	 *                         If an I/O error occurs.
 	 */
 	private void consumeWhitespace() throws IOException {
 		while (Character.isWhitespace(peek())) {
@@ -189,7 +188,7 @@ public class JsonReader {
 	 * @throws IllegalArgumentException
 	 *                                      If an unexpected character is found.
 	 * @throws IOException
-	 *                                      If the Reader fails.
+	 *                                      If an I/O error occurs.
 	 */
 	private Json readObject() throws IOException {
 		consumeWhitespace();
@@ -226,7 +225,7 @@ public class JsonReader {
 	 * @throws IllegalArgumentException
 	 *                                      If an unexpected character is found.
 	 * @throws IOException
-	 *                                      If the Reader fails.
+	 *                                      If an I/O error occurs.
 	 */
 	private Json readArray() throws IOException {
 		check('[');
@@ -259,7 +258,7 @@ public class JsonReader {
 	 * @throws IllegalArgumentException
 	 *                                      If an unexpected character is found.
 	 * @throws IOException
-	 *                                      If the Reader fails.
+	 *                                      If an I/O error occurs.
 	 */
 	private String readString() throws IOException {
 		consumeWhitespace();
@@ -318,7 +317,7 @@ public class JsonReader {
 	 * @throws IllegalArgumentException
 	 *                                      If an unexpected character is found.
 	 * @throws IOException
-	 *                                      If the Reader fails.
+	 *                                      If an I/O error occurs.
 	 */
 	private Json readNumber() throws IOException {
 		consumeWhitespace();
@@ -369,7 +368,7 @@ public class JsonReader {
 	 * @throws IllegalArgumentException
 	 *                                      If an unexpected character is found.
 	 * @throws IOException
-	 *                                      If the Reader fails.
+	 *                                      If an I/O error occurs.
 	 */
 	private Json readTrue() throws IOException {
 		consumeWhitespace();
@@ -387,7 +386,7 @@ public class JsonReader {
 	 * @throws IllegalArgumentException
 	 *                                      If an unexpected character is found.
 	 * @throws IOException
-	 *                                      If the Reader fails.
+	 *                                      If an I/O error occurs.
 	 */
 	private Json readFalse() throws IOException {
 		consumeWhitespace();
@@ -406,7 +405,7 @@ public class JsonReader {
 	 * @throws IllegalArgumentException
 	 *                                      If an unexpected character is found.
 	 * @throws IOException
-	 *                                      If the Reader fails.
+	 *                                      If an I/O error occurs.
 	 */
 	private Json readNull() throws IOException {
 		consumeWhitespace();
@@ -424,7 +423,7 @@ public class JsonReader {
 	 * @throws IllegalArgumentException
 	 *                                      If an unexpected character is found.
 	 * @throws IOException
-	 *                                      If the Reader fails.
+	 *                                      If an I/O error occurs.
 	 */
 	private Json readValue() throws IOException {
 		consumeWhitespace();
@@ -465,7 +464,7 @@ public class JsonReader {
 	 * @throws IllegalArgumentException
 	 *                                      If an unexpected character is found.
 	 * @throws IOException
-	 *                                      If the Reader fails.
+	 *                                      If an I/O error occurs.
 	 */
 	private Json readStructure() throws IOException {
 		consumeWhitespace();
@@ -479,15 +478,7 @@ public class JsonReader {
 		}
 	}
 
-	/**
-	 * Reads the next JSON structure.
-	 * 
-	 * @return The next JSON structure.
-	 * @throws IllegalArgumentException
-	 *                                      If an unexpected character is found.
-	 * @throws IOException
-	 *                                      If the Reader fails.
-	 */
+	@Override
 	public Json read() throws IOException {
 		return readStructure();
 	}

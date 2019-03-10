@@ -3,12 +3,15 @@ package impl;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.Set;
 
 import api.Json;
+import api.Json.JsonType;
+import api.JsonWriter;
 
 /**
  * A Writer to write JSON values to a Stream.
@@ -18,7 +21,7 @@ import api.Json;
  * @since 1.0
  * 
  */
-public class JsonWriter {
+public class JsonWriterImplementation implements JsonWriter {
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Instance fields
@@ -37,7 +40,7 @@ public class JsonWriter {
 	 * @param writer
 	 *                   A Writer to write JSON data to.
 	 */
-	public JsonWriter(Writer writer) {
+	public JsonWriterImplementation(Writer writer) {
 		this.writer = writer;
 	}
 
@@ -50,7 +53,7 @@ public class JsonWriter {
 	 * @param charset
 	 *                         A Charset to write the data to the OutputStream as.
 	 */
-	public JsonWriter(OutputStream outputStream, Charset charset) {
+	public JsonWriterImplementation(OutputStream outputStream, Charset charset) {
 		this(new OutputStreamWriter(outputStream, charset));
 	}
 
@@ -61,12 +64,29 @@ public class JsonWriter {
 	 * @param outputStream
 	 *                         An OutputStream to write JSON data to.
 	 */
-	public JsonWriter(OutputStream outputStream) {
+	public JsonWriterImplementation(OutputStream outputStream) {
 		this(new OutputStreamWriter(outputStream));
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Class methods
+
+	/**
+	 * Converts the given JSON value to String without formatting.
+	 * 
+	 * @param json A JSON value.
+	 * @return The given JSON value in its String form.
+	 */
+	protected static String toString(Json json) {
+		Writer writer = new StringWriter();
+		JsonWriterImplementation jsonWriter = new JsonWriterImplementation(writer);
+		try {
+			jsonWriter.writeValue(json, 0, "", "", "");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return writer.toString();
+	}
 
 	/**
 	 * Generates a line of indentation using the given line break String,
@@ -96,36 +116,39 @@ public class JsonWriter {
 	 * @return The given String, escaped.
 	 */
 	private static String escape(String string) {
-		string = string.replace("\"", "\\\"");
-		string = string.replace("\\", "\\\\");
-		string = string.replace("/", "\\/");
-		string = string.replace("\b", "\\\b");
-		string = string.replace("\f", "\\\f");
-		string = string.replace("\n", "\\\n");
-		string = string.replace("\r", "\\\r");
-		string = string.replace("\t", "\\\t");
-		return string;
+		StringBuilder stringBuilder = new StringBuilder();
+		for (int index = 0; index < string.length(); ++index) {
+			char character = string.charAt(index);
+			switch (character) {
+			case '\"':
+				stringBuilder.append("\\\"");
+			case '\\':
+				stringBuilder.append("\\\\");
+			case '/':
+				stringBuilder.append("\\/");
+			case '\b':
+				stringBuilder.append("\\b");
+			case '\f':
+				stringBuilder.append("\\f");
+			case '\n':
+				stringBuilder.append("\\n");
+			case '\r':
+				stringBuilder.append("\\r");
+			case '\t':
+				stringBuilder.append("\\t");
+			}
+		}
+		return stringBuilder.toString();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
-	/**
-	 * Writes a JSON value to this Writer.
-	 * 
-	 * @param json
-	 *                        A JSON value to write to this Writer.
-	 * @param lineBreak
-	 *                        String that will be used as a line break.
-	 * @param indentation
-	 *                        String that will be used to indent.
-	 * @param padding
-	 *                        String that will be used to pad.
-	 * @throws IOException
-	 *                         If the Writer fails.
-	 */
-	public void writeValue(JsonImplementation json, String lineBreak, String indentation, String padding)
-			throws IOException {
+	@Override
+	public void write(Json json, String lineBreak, String indentation, String padding) throws IOException {
+		if (json.getType() != JsonType.OBJECT && json.getType() != JsonType.ARRAY) {
+			throw new IllegalArgumentException("The JSON value provided is not a JSON structure");
+		}
 		writeValue(json, 0, lineBreak, indentation, padding);
 	}
 
@@ -143,7 +166,7 @@ public class JsonWriter {
 	 * @param padding
 	 *                             String that will be used to pad.
 	 * @throws IOException
-	 *                         If the Writer fails.
+	 *                         If an I/O error occurs.
 	 */
 	private void writeValue(Json json, int indentationLevel, String lineBreak, String indentation, String padding)
 			throws IOException {

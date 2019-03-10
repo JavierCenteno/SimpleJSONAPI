@@ -1,8 +1,5 @@
 package impl;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -56,14 +53,7 @@ public class JsonImplementation implements Json {
 	 */
 	@Override
 	public String toString() {
-		Writer writer = new StringWriter();
-		JsonWriter jsonWriter = new JsonWriter(writer);
-		try {
-			jsonWriter.writeValue(this, "", "", "");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return writer.toString();
+		return JsonWriterImplementation.toString(this);
 	}
 
 	@Override
