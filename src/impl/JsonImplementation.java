@@ -135,7 +135,7 @@ public class JsonImplementation implements Json {
 			case "java.math.BigDecimal":
 				return resultClass.cast(((Number) this.value).byteValue());
 			case "java.lang.Boolean":
-				return resultClass.cast(((Boolean) this.value) ? new Byte((byte) 1) : new Byte((byte) 0));
+				return resultClass.cast(((Boolean) this.value) ? Byte.valueOf((byte) 1) : Byte.valueOf((byte) 0));
 			default:
 				return resultClass.cast(this.value);
 			}
@@ -156,7 +156,7 @@ public class JsonImplementation implements Json {
 			case "java.math.BigDecimal":
 				return resultClass.cast(((Number) this.value).shortValue());
 			case "java.lang.Boolean":
-				return resultClass.cast(((Boolean) this.value) ? new Short((short) 1) : new Short((short) 0));
+				return resultClass.cast(((Boolean) this.value) ? Short.valueOf((short) 1) : Short.valueOf((short) 0));
 			default:
 				return resultClass.cast(this.value);
 			}
@@ -177,7 +177,7 @@ public class JsonImplementation implements Json {
 			case "java.math.BigDecimal":
 				return resultClass.cast(((Number) this.value).intValue());
 			case "java.lang.Boolean":
-				return resultClass.cast(((Boolean) this.value) ? new Integer(1) : new Integer(0));
+				return resultClass.cast(((Boolean) this.value) ? Integer.valueOf(1) : Integer.valueOf(0));
 			default:
 				return resultClass.cast(this.value);
 			}
@@ -198,7 +198,7 @@ public class JsonImplementation implements Json {
 			case "java.math.BigDecimal":
 				return resultClass.cast(((Number) this.value).longValue());
 			case "java.lang.Boolean":
-				return resultClass.cast(((Boolean) this.value) ? new Long(1L) : new Long(0L));
+				return resultClass.cast(((Boolean) this.value) ? Long.valueOf(1L) : Long.valueOf(0L));
 			default:
 				return resultClass.cast(this.value);
 			}
@@ -219,7 +219,7 @@ public class JsonImplementation implements Json {
 			case "java.math.BigDecimal":
 				return resultClass.cast(((Number) this.value).floatValue());
 			case "java.lang.Boolean":
-				return resultClass.cast(((Boolean) this.value) ? new Float(1.0) : new Float(0.0));
+				return resultClass.cast(((Boolean) this.value) ? Float.valueOf(1.0f) : Float.valueOf(0.0f));
 			default:
 				return resultClass.cast(this.value);
 			}
@@ -240,7 +240,7 @@ public class JsonImplementation implements Json {
 			case "java.math.BigDecimal":
 				return resultClass.cast(((Number) this.value).doubleValue());
 			case "java.lang.Boolean":
-				return resultClass.cast(((Boolean) this.value) ? new Double(1.0d) : new Double(0.0d));
+				return resultClass.cast(((Boolean) this.value) ? Double.valueOf(1.0d) : Double.valueOf(0.0d));
 			default:
 				return resultClass.cast(this.value);
 			}
@@ -348,7 +348,7 @@ public class JsonImplementation implements Json {
 			case "java.lang.String":
 				return resultClass.cast(((String) this.value).charAt(0));
 			case "java.lang.Boolean":
-				return resultClass.cast(((Boolean) this.value) ? new Character('t') : new Character('f'));
+				return resultClass.cast(((Boolean) this.value) ? Character.valueOf('t') : Character.valueOf('f'));
 			default:
 				return resultClass.cast(this.value);
 			}

@@ -368,13 +368,13 @@ public class JsonReaderImplementation implements JsonReader {
 		if (isWhole) {
 			BigInteger result = new BigInteger(stringBuilder.toString());
 			if (result.compareTo(MIN_BYTE_VALUE) >= 0 && 0 >= result.compareTo(MAX_BYTE_VALUE)) {
-				number = new Byte(result.byteValue());
+				number = Byte.valueOf(result.byteValue());
 			} else if (result.compareTo(MIN_SHORT_VALUE) >= 0 && 0 >= result.compareTo(MAX_SHORT_VALUE)) {
-				number = new Short(result.shortValue());
+				number = Short.valueOf(result.shortValue());
 			} else if (result.compareTo(MIN_INTEGER_VALUE) >= 0 && 0 >= result.compareTo(MAX_INTEGER_VALUE)) {
-				number = new Integer(result.intValue());
+				number = Integer.valueOf(result.intValue());
 			} else if (result.compareTo(MIN_LONG_VALUE) >= 0 && 0 >= result.compareTo(MAX_LONG_VALUE)) {
-				number = new Long(result.longValue());
+				number = Long.valueOf(result.longValue());
 			} else {
 				number = result;
 			}
