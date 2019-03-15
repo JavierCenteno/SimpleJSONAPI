@@ -25,7 +25,40 @@ public interface Json {
 	 *
 	 */
 	public static enum JsonType {
-	OBJECT, ARRAY, STRING, NUMBER, BOOLEAN, NULL
+	/**
+	 * Represents the object type of JSON value, represented by pairs consisting of
+	 * a JSON string and a JSON value, separated by a colon, in curly brackets
+	 * separated by commas.
+	 */
+	OBJECT,
+	/**
+	 * Represents the array type of JSON value, represented by other JSON values in
+	 * square brackets separated by commas.
+	 */
+	ARRAY,
+	/**
+	 * Represents the string type of JSON value, represented by a string in
+	 * quotations with any quotation marks or backslashes escaped with a backslash
+	 * and any ASCII control characters represented as a backslash followed by an u
+	 * and the Unicode code point in hexadecimal format.
+	 */
+	STRING,
+	/**
+	 * Represents the number type of JSON value. In their string form, numbers are
+	 * represented in base 10, they can have sign, a decimal point and an exponent
+	 * (noted by an e).
+	 */
+	NUMBER,
+	/**
+	 * Represents the boolean type of JSON value. Booleans can be either true,
+	 * represented by the string "true", or false, represented by the string
+	 * "false".
+	 */
+	BOOLEAN,
+	/**
+	 * Represents the null type of JSON value, represented by the string "null".
+	 */
+	NULL
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
