@@ -29,13 +29,45 @@ public class JsonReaderImplementation implements JsonReader {
 	////////////////////////////////////////////////////////////////////////////////
 	// Class fields
 
+	/**
+	 * A BigInteger representing the minimum possible value that can be represented
+	 * by a byte.
+	 */
 	private static final BigInteger MIN_BYTE_VALUE = BigInteger.valueOf(Byte.MIN_VALUE);
+	/**
+	 * A BigInteger representing the maximum possible value that can be represented
+	 * by a byte.
+	 */
 	private static final BigInteger MAX_BYTE_VALUE = BigInteger.valueOf(Byte.MAX_VALUE);
+	/**
+	 * A BigInteger representing the minimum possible value that can be represented
+	 * by a short.
+	 */
 	private static final BigInteger MIN_SHORT_VALUE = BigInteger.valueOf(Short.MIN_VALUE);
+	/**
+	 * A BigInteger representing the maximum possible value that can be represented
+	 * by a short.
+	 */
 	private static final BigInteger MAX_SHORT_VALUE = BigInteger.valueOf(Short.MAX_VALUE);
+	/**
+	 * A BigInteger representing the minimum possible value that can be represented
+	 * by an integer.
+	 */
 	private static final BigInteger MIN_INTEGER_VALUE = BigInteger.valueOf(Integer.MIN_VALUE);
+	/**
+	 * A BigInteger representing the maximum possible value that can be represented
+	 * by an integer.
+	 */
 	private static final BigInteger MAX_INTEGER_VALUE = BigInteger.valueOf(Integer.MAX_VALUE);
+	/**
+	 * A BigInteger representing the minimum possible value that can be represented
+	 * by a long.
+	 */
 	private static final BigInteger MIN_LONG_VALUE = BigInteger.valueOf(Long.MIN_VALUE);
+	/**
+	 * A BigInteger representing the maximum possible value that can be represented
+	 * by a long.
+	 */
 	private static final BigInteger MAX_LONG_VALUE = BigInteger.valueOf(Long.MAX_VALUE);
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -344,25 +376,19 @@ public class JsonReaderImplementation implements JsonReader {
 		if (peek() == '.') {
 			stringBuilder.append((char) pop());
 			isWhole = false;
+			while (Character.isDigit(peek())) {
+				stringBuilder.append((char) pop());
+			}
 		}
-		while (Character.isDigit(peek())) {
-			stringBuilder.append((char) pop());
-		}
-		if (peek() == 'e') {
-			stringBuilder.append((char) pop());
-		} else if (peek() == 'E') {
-			stringBuilder.append((char) pop());
-		}
-		if (peek() == '-') {
+		if (peek() == 'e' || peek() == 'E') {
 			stringBuilder.append((char) pop());
 			isWhole = false;
-		}
-		if (peek() == '+') {
-			stringBuilder.append((char) pop());
-			isWhole = false;
-		}
-		while (Character.isDigit(peek())) {
-			stringBuilder.append((char) pop());
+			if (peek() == '-' || peek() == '+') {
+				stringBuilder.append((char) pop());
+			}
+			while (Character.isDigit(peek())) {
+				stringBuilder.append((char) pop());
+			}
 		}
 		Number number;
 		if (isWhole) {
