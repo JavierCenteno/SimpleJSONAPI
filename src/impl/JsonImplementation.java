@@ -68,6 +68,12 @@ public class JsonImplementation implements Json {
 			return JsonType.ARRAY;
 		case "java.lang.String":
 			return JsonType.STRING;
+		case "java.lang.Byte":
+		case "java.lang.Short":
+		case "java.lang.Integer":
+		case "java.lang.Long":
+		case "java.lang.Float":
+		case "java.lang.Double":
 		case "java.math.BigInteger":
 		case "java.math.BigDecimal":
 			return JsonType.NUMBER;
