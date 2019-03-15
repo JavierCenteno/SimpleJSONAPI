@@ -58,6 +58,7 @@ public class JsonImplementation implements Json {
 
 	@Override
 	public JsonType getType() {
+		// Check for null first to avoid null pointer exceptions
 		if (this.value == null) {
 			return JsonType.NULL;
 		}
@@ -88,17 +89,20 @@ public class JsonImplementation implements Json {
 	@Override
 	public <T> T as(Class<T> resultClass) {
 		if (resultClass.isArray()) {
-			List<Json> list = (List<Json>) value;
+			Collection<Json> values = this.values();
 			Class<?> componentType = resultClass.getComponentType();
-			int size = list.size();
+			int size = values.size();
 			Object[] array = new Object[size];
 			T newArray = (T) Array.newInstance(componentType, size);
-			for (int i = 0; i < size; ++i) {
-				array[i] = list.get(i).as(componentType);
+			int index = 0;
+			for (Json value : values) {
+				array[index] = value.as(componentType);
+				++index;
 			}
 			System.arraycopy(array, 0, newArray, 0, size);
 			return resultClass.cast(newArray);
 		}
+		// Check for null first to avoid null pointer exceptions
 		if (this.value == null) {
 			return null;
 		}
@@ -330,7 +334,6 @@ public class JsonImplementation implements Json {
 		case "java.lang.Number":
 			switch (this.value.getClass().getName()) {
 			case "java.lang.String":
-				// If the class is just Number, use BigDecimal
 				return resultClass.cast(new BigDecimal((String) this.value));
 			case "java.lang.Byte":
 			case "java.lang.Short":
@@ -359,7 +362,7 @@ public class JsonImplementation implements Json {
 				return resultClass.cast(this.value);
 			}
 		case "java.lang.CharSequence":
-			// If the class is just Number, use String
+			// If the class is CharSequence, use String
 		case "java.lang.String":
 			switch (this.value.getClass().getName()) {
 			case "java.lang.String":
