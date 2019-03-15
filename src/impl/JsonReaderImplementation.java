@@ -152,6 +152,20 @@ public class JsonReaderImplementation implements JsonReader {
 	////////////////////////////////////////////////////////////////////////////////
 	// Class methods
 
+	/**
+	 * Turns a single hexadecimal character into an integer. Characters in the range
+	 * '0' to '9' are turned into the integers 0 to 9 and characters in the range
+	 * 'a' to 'f' or 'A' to 'F' are turned into the integers 10 to 15. Any other
+	 * character causes an IllegalArgumentException.
+	 * 
+	 * @param character
+	 *                      An hexadecimal character which must be between '0' and
+	 *                      '9', 'a' and 'f' or 'A' and 'F'.
+	 * @return The character parsed as an hexadecimal character.
+	 * @throws IllegalArgumentException
+	 *                                      If the character is not a valid
+	 *                                      hexadecimal character.
+	 */
 	private static int hexadecimalToInteger(char character) {
 		if ('0' <= character && character <= '9') {
 			return character - '0';
