@@ -397,13 +397,13 @@ public class JsonReaderImplementation implements JsonReader {
 		if (peek() == '-') {
 			stringBuilder.append((char) pop());
 		}
-		while (Character.isDigit(peek())) {
+		while ('0' <= peek() && peek() <= '9') {
 			stringBuilder.append((char) pop());
 		}
 		if (peek() == '.') {
 			stringBuilder.append((char) pop());
 			isWhole = false;
-			while (Character.isDigit(peek())) {
+			while ('0' <= peek() && peek() <= '9') {
 				stringBuilder.append((char) pop());
 			}
 		}
@@ -413,7 +413,7 @@ public class JsonReaderImplementation implements JsonReader {
 			if (peek() == '-' || peek() == '+') {
 				stringBuilder.append((char) pop());
 			}
-			while (Character.isDigit(peek())) {
+			while ('0' <= peek() && peek() <= '9') {
 				stringBuilder.append((char) pop());
 			}
 		}
