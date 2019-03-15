@@ -150,6 +150,20 @@ public class JsonReaderImplementation implements JsonReader {
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
+	// Class methods
+
+	private static int hexadecimalToInteger(char character) {
+		if ('0' <= character && character <= '9') {
+			return character - '0';
+		} else if ('a' <= character && character <= 'f') {
+			return character - 87;// 87 == 'a' - 10
+		} else if ('A' <= character && character <= 'F') {
+			return character - 55;// 55 == 'A' - 10
+		}
+		throw new IllegalArgumentException("Character \'" + character + "\' is not an hexadecimal character.");
+	}
+
+	////////////////////////////////////////////////////////////////////////////////
 	// Instance methods
 
 	/**
@@ -337,20 +351,19 @@ public class JsonReaderImplementation implements JsonReader {
 					stringBuilder.append('\t');
 					break;
 				case 'u':
-					String escapedUnicode = "";
-					escapedUnicode += (char) pop();
-					escapedUnicode += (char) pop();
-					escapedUnicode += (char) pop();
-					escapedUnicode += (char) pop();
-					char unescapedUnicode = (char) Integer.parseInt(escapedUnicode, 16);
-					stringBuilder.append(unescapedUnicode);
+					int unescaped = 0;
+					unescaped |= hexadecimalToInteger((char) pop()) << 12;
+					unescaped |= hexadecimalToInteger((char) pop()) << 8;
+					unescaped |= hexadecimalToInteger((char) pop()) << 4;
+					unescaped |= hexadecimalToInteger((char) pop());
+					stringBuilder.append((char) unescaped);
 					break;
 				}
 			} else {
 				stringBuilder.append((char) pop());
 			}
 		}
-		pop();
+		check('\"');
 		return stringBuilder.toString();
 	}
 
