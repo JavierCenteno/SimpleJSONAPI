@@ -88,8 +88,7 @@ public interface Json {
 	 * Obtain the JSON value under the given array of keys.
 	 * 
 	 * The value accessed by this method will be the one found by looking up each of
-	 * the keys in the JSON value obtained from the previous key, or the value used
-	 * by this JSON value for the first key.
+	 * the keys in the JSON value in the order they appear.
 	 * 
 	 * @param keys
 	 *                 The array of keys used to access a JSON value.
