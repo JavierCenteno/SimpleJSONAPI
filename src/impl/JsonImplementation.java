@@ -1,5 +1,6 @@
 package impl;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -43,6 +44,27 @@ public class JsonImplementation implements Json {
 	 */
 	protected JsonImplementation(Object value) {
 		this.value = value;
+	}
+
+	////////////////////////////////////////////////////////////////////////////////
+	// Class methods
+
+	/**
+	 * Creates a JSON structure from the given String.
+	 * 
+	 * @param string
+	 *                   A string.
+	 * @return A JSON structure parsed from the given String.
+	 * @throws IllegalArgumentException
+	 *                                      If the given String can't be parsed.
+	 */
+	public Json parse(String string) {
+		try {
+			JsonReaderImplementation jsonReader = new JsonReaderImplementation(string);
+			return jsonReader.read();
+		} catch (IOException e) {
+			throw new IllegalArgumentException(e);
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -403,7 +425,7 @@ public class JsonImplementation implements Json {
 				current = map.get(key.toString());
 			} else if (current.value instanceof List) {
 				Integer valueIndex = null;
-				if(key instanceof Number) {
+				if (key instanceof Number) {
 					valueIndex = ((Number) key).intValue();
 				} else if (key instanceof String) {
 					valueIndex = Integer.parseInt((String) key);
