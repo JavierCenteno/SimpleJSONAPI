@@ -394,16 +394,24 @@ public class JsonImplementation implements Json {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Json get(String... keys) {
+	public Json get(Object... keys) {
 		JsonImplementation current = this;
 		for (int index = 0; index < keys.length; ++index) {
-			String key = keys[index];
+			Object key = keys[index];
 			if (current.value instanceof Map) {
 				Map<String, JsonImplementation> map = (Map<String, JsonImplementation>) current.value;
-				current = map.get(key);
+				current = map.get(key.toString());
 			} else if (current.value instanceof List) {
+				Integer valueIndex = null;
+				if(key instanceof Number) {
+					valueIndex = ((Number) key).intValue();
+				} else if (key instanceof String) {
+					valueIndex = Integer.parseInt((String) key);
+				} else {
+					throw new IllegalArgumentException("Key is not a Number or a String.");
+				}
 				List<JsonImplementation> list = (List<JsonImplementation>) current.value;
-				current = list.get(Integer.parseInt(key));
+				current = list.get(valueIndex);
 			} else {
 				throw new ClassCastException("JSON value is not an object or an array");
 			}

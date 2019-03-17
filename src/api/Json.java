@@ -97,7 +97,7 @@ public interface Json {
 	 *                                      If any of the keys doesn't exist.
 	 * @return The JSON value found under the given array of keys.
 	 */
-	public Json get(String... keys);
+	public Json get(Object... keys);
 
 	/**
 	 * Gets the set of keys of this JSON value.

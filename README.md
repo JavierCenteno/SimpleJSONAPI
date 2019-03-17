@@ -28,6 +28,6 @@ For example, if you have the JSON value:
 This would be used to obtain the name of the first employee:
 
 ```
-String firstEmployeeName = jsonValue.get("employees", "0").as(String.class);
+String firstEmployeeName = jsonValue.get("employees", 0).as(String.class);
 ```
 
