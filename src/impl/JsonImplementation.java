@@ -58,7 +58,7 @@ public class JsonImplementation implements Json {
 	 * @throws IllegalArgumentException
 	 *                                      If the given String can't be parsed.
 	 */
-	public Json parse(String string) {
+	public static Json parse(String string) {
 		try {
 			JsonReaderImplementation jsonReader = new JsonReaderImplementation(string);
 			return jsonReader.read();
