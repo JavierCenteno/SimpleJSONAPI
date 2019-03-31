@@ -4,11 +4,11 @@ import java.io.IOException;
 
 /**
  * Writes a JSON structure to an output.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @since 1.0
- * 
+ *
  */
 public interface JsonWriter {
 
@@ -17,22 +17,22 @@ public interface JsonWriter {
 
 	/**
 	 * Writes a JSON structure without any formatting.
-	 * 
+	 *
 	 * @param json
-	 *                        A JSON structure to write.
+	 *                 A JSON structure to write.
 	 * @throws IllegalArgumentException
 	 *                                      If the JSON value provided has errors or
 	 *                                      is not a JSON structure.
 	 * @throws IOException
 	 *                                      If an I/O error occurs.
 	 */
-	public default void write(Json json) throws IOException {
-		write(json, "", "", "");
+	public default void write(final Json json) throws IOException {
+		this.write(json, "", "", "");
 	}
 
 	/**
 	 * Writes a JSON structure.
-	 * 
+	 *
 	 * @param json
 	 *                        A JSON structure to write.
 	 * @param lineBreak

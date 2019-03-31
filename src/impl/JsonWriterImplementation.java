@@ -15,11 +15,11 @@ import api.JsonWriter;
 
 /**
  * A Writer to write JSON values to a Stream.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @since 1.0
- * 
+ *
  */
 public class JsonWriterImplementation implements JsonWriter {
 
@@ -29,42 +29,42 @@ public class JsonWriterImplementation implements JsonWriter {
 	/**
 	 * The Writer this JsonReader is based on.
 	 */
-	private Writer writer;
+	private final Writer writer;
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
 
 	/**
 	 * Constructs a JsonWriter from the given Writer.
-	 * 
+	 *
 	 * @param writer
 	 *                   A Writer to write JSON data to.
 	 */
-	public JsonWriterImplementation(Writer writer) {
+	public JsonWriterImplementation(final Writer writer) {
 		this.writer = writer;
 	}
 
 	/**
 	 * Constructs a JsonWriter from the given OutputStream by making a Writer from
 	 * it using the given Charset.
-	 * 
+	 *
 	 * @param outputStream
 	 *                         An OutputStream to write JSON data to.
 	 * @param charset
 	 *                         A Charset to write the data to the OutputStream as.
 	 */
-	public JsonWriterImplementation(OutputStream outputStream, Charset charset) {
+	public JsonWriterImplementation(final OutputStream outputStream, final Charset charset) {
 		this(new OutputStreamWriter(outputStream, charset));
 	}
 
 	/**
 	 * Constructs a JsonWriter from the given OutputStream by making a Writer from
 	 * it.
-	 * 
+	 *
 	 * @param outputStream
 	 *                         An OutputStream to write JSON data to.
 	 */
-	public JsonWriterImplementation(OutputStream outputStream) {
+	public JsonWriterImplementation(final OutputStream outputStream) {
 		this(new OutputStreamWriter(outputStream));
 	}
 
@@ -73,16 +73,17 @@ public class JsonWriterImplementation implements JsonWriter {
 
 	/**
 	 * Converts the given JSON value to String without formatting.
-	 * 
-	 * @param json A JSON value.
+	 *
+	 * @param json
+	 *                 A JSON value.
 	 * @return The given JSON value in its String form.
 	 */
-	protected static String toString(Json json) {
-		Writer writer = new StringWriter();
-		JsonWriterImplementation jsonWriter = new JsonWriterImplementation(writer);
+	protected static String toString(final Json json) {
+		final Writer writer = new StringWriter();
+		final JsonWriterImplementation jsonWriter = new JsonWriterImplementation(writer);
 		try {
 			jsonWriter.writeValue(json, 0, "", "", "");
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 		return writer.toString();
@@ -91,7 +92,7 @@ public class JsonWriterImplementation implements JsonWriter {
 	/**
 	 * Generates a line of indentation using the given line break String,
 	 * indentation String and indentation level.
-	 * 
+	 *
 	 * @param indentationLevel
 	 *                             An indendation level.
 	 * @param lineBreak
@@ -100,7 +101,7 @@ public class JsonWriterImplementation implements JsonWriter {
 	 *                             String that will be used to indent.
 	 * @return A line of indentation.
 	 */
-	private static String indentation(int indentationLevel, String lineBreak, String indendation) {
+	private static String indentation(final int indentationLevel, final String lineBreak, final String indendation) {
 		String result = lineBreak;
 		for (int index = 0; index < indentationLevel; ++index) {
 			result += indendation;
@@ -110,16 +111,16 @@ public class JsonWriterImplementation implements JsonWriter {
 
 	/**
 	 * Escapes the given String.
-	 * 
+	 *
 	 * @param string
 	 *                   The String to escape.
 	 * @return The given String, escaped.
 	 */
-	private static String escape(String string) {
-		StringBuilder stringBuilder = new StringBuilder();
+	private static String escape(final String string) {
+		final StringBuilder stringBuilder = new StringBuilder();
 		for (int index = 0; index < string.length(); ++index) {
-			char character = string.charAt(index);
-			if(0x00 <= character && character < 0x20) {
+			final char character = string.charAt(index);
+			if ((0x00 <= character) && (character < 0x20)) {
 				stringBuilder.append('\\');
 				stringBuilder.append('u');
 				stringBuilder.append('0');
@@ -173,16 +174,17 @@ public class JsonWriterImplementation implements JsonWriter {
 	// Instance methods
 
 	@Override
-	public void write(Json json, String lineBreak, String indentation, String padding) throws IOException {
-		if (json.getType() != JsonType.OBJECT && json.getType() != JsonType.ARRAY) {
+	public void write(final Json json, final String lineBreak, final String indentation, final String padding)
+			throws IOException {
+		if ((json.getType() != JsonType.OBJECT) && (json.getType() != JsonType.ARRAY)) {
 			throw new IllegalArgumentException("The JSON value provided is not a JSON structure");
 		}
-		writeValue(json, 0, lineBreak, indentation, padding);
+		this.writeValue(json, 0, lineBreak, indentation, padding);
 	}
 
 	/**
 	 * Writes a JSON value to this Writer starting at a given indentation level.
-	 * 
+	 *
 	 * @param json
 	 *                             A JSON value to write to this Writer.
 	 * @param indentationLevel
@@ -196,46 +198,46 @@ public class JsonWriterImplementation implements JsonWriter {
 	 * @throws IOException
 	 *                         If an I/O error occurs.
 	 */
-	private void writeValue(Json json, int indentationLevel, String lineBreak, String indentation, String padding)
-			throws IOException {
+	private void writeValue(final Json json, final int indentationLevel, final String lineBreak,
+			final String indentation, final String padding) throws IOException {
 		switch (json.getType()) {
 		case OBJECT:
-			Set<String> keys = json.keys();
+			final Set<String> keys = json.keys();
 			this.writer.write("{");
 			int keyCounter = 0;
-			for (String key : keys) {
-				this.writer.write(indentation(indentationLevel + 1, lineBreak, indentation));
+			for (final String key : keys) {
+				this.writer.write(JsonWriterImplementation.indentation(indentationLevel + 1, lineBreak, indentation));
 				this.writer.write("\"");
-				this.writer.write(escape(key));
+				this.writer.write(JsonWriterImplementation.escape(key));
 				this.writer.write("\"");
 				this.writer.write(":");
 				this.writer.write(padding);
-				Json value = json.get(key);
+				final Json value = json.get(key);
 				this.writeValue(value, indentationLevel + 1, lineBreak, indentation, padding);
 				if (++keyCounter < keys.size()) {
 					this.writer.write(",");
 				}
 			}
-			this.writer.write(indentation(indentationLevel, lineBreak, indentation));
+			this.writer.write(JsonWriterImplementation.indentation(indentationLevel, lineBreak, indentation));
 			this.writer.write("}");
 			break;
 		case ARRAY:
-			Collection<Json> values = json.values();
+			final Collection<Json> values = json.values();
 			this.writer.write("[");
 			int valueCounter = 0;
-			for (Json value : values) {
-				this.writer.write(indentation(indentationLevel + 1, lineBreak, indentation));
+			for (final Json value : values) {
+				this.writer.write(JsonWriterImplementation.indentation(indentationLevel + 1, lineBreak, indentation));
 				this.writeValue(value, indentationLevel + 1, lineBreak, indentation, padding);
 				if (++valueCounter < values.size()) {
 					this.writer.write(",");
 				}
 			}
-			this.writer.write(indentation(indentationLevel, lineBreak, indentation));
+			this.writer.write(JsonWriterImplementation.indentation(indentationLevel, lineBreak, indentation));
 			this.writer.write("]");
 			break;
 		case STRING:
 			this.writer.write("\"");
-			this.writer.write(escape(json.as(String.class)));
+			this.writer.write(JsonWriterImplementation.escape(json.as(String.class)));
 			this.writer.write("\"");
 			break;
 		case NUMBER:

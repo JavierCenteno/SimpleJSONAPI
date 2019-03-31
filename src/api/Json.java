@@ -5,11 +5,11 @@ import java.util.Set;
 
 /**
  * Represents a JSON value.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @since 1.0
- * 
+ *
  */
 public interface Json {
 
@@ -18,7 +18,7 @@ public interface Json {
 
 	/**
 	 * An enumeration of the different types of JSON data.
-	 * 
+	 *
 	 * @author Javier Centeno Vega <jacenve@telefonica.net>
 	 * @version 1.0
 	 * @since 1.0
@@ -66,14 +66,14 @@ public interface Json {
 
 	/**
 	 * Get the type of this JSON value.
-	 * 
+	 *
 	 * @return The type of this JSON value.
 	 */
 	public JsonType getType();
 
 	/**
 	 * Obtain this JSON value as the given class.
-	 * 
+	 *
 	 * @param resultClass
 	 *                        The class the result will be attempted to be converted
 	 *                        into. Primitive classes are supported.
@@ -86,10 +86,10 @@ public interface Json {
 
 	/**
 	 * Obtain the JSON value under the given array of keys.
-	 * 
+	 *
 	 * The value accessed by this method will be the one found by looking up each of
 	 * the keys in the JSON value in the order they appear.
-	 * 
+	 *
 	 * @param keys
 	 *                 The array of keys used to access a JSON value.
 	 * @throws IllegalArgumentException
@@ -100,7 +100,7 @@ public interface Json {
 
 	/**
 	 * Gets the set of keys of this JSON value.
-	 * 
+	 *
 	 * @throws ClassCastException
 	 *                                If this JSON value is not a JSON structure.
 	 * @return The set of keys of this JSON value.
@@ -109,7 +109,7 @@ public interface Json {
 
 	/**
 	 * Gets the collection of values of this JSON value.
-	 * 
+	 *
 	 * @throws ClassCastException
 	 *                                If this JSON value is not a JSON structure.
 	 * @return The collection of values of this JSON value.

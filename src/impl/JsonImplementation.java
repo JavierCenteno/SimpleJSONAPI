@@ -16,12 +16,12 @@ import api.Json;
 
 /**
  * This is an implementation of the JSON interface.
- * 
+ *
  * @see api.Json
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @since 1.0
- * 
+ *
  */
 public class JsonImplementation implements Json {
 
@@ -34,7 +34,7 @@ public class JsonImplementation implements Json {
 	 * BigInteger or a BigDecimal if it's a JSON number, a Boolean if it's a JSON
 	 * boolean or null if it's a JSON null.
 	 */
-	private Object value;
+	private final Object value;
 
 	////////////////////////////////////////////////////////////////////////////////
 	// Instance initializers
@@ -42,7 +42,7 @@ public class JsonImplementation implements Json {
 	/**
 	 * Constructs a JsonImplementation with a given value.
 	 */
-	protected JsonImplementation(Object value) {
+	protected JsonImplementation(final Object value) {
 		this.value = value;
 	}
 
@@ -51,18 +51,18 @@ public class JsonImplementation implements Json {
 
 	/**
 	 * Creates a JSON structure from the given String.
-	 * 
+	 *
 	 * @param string
 	 *                   A string.
 	 * @return A JSON structure parsed from the given String.
 	 * @throws IllegalArgumentException
 	 *                                      If the given String can't be parsed.
 	 */
-	public static Json parse(String string) {
+	public static Json parse(final String string) {
 		try {
-			JsonReaderImplementation jsonReader = new JsonReaderImplementation(string);
+			final JsonReaderImplementation jsonReader = new JsonReaderImplementation(string);
 			return jsonReader.read();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new IllegalArgumentException(e);
 		}
 	}
@@ -111,13 +111,13 @@ public class JsonImplementation implements Json {
 	@Override
 	public <T> T as(Class<T> resultClass) {
 		if (resultClass.isArray()) {
-			Collection<Json> values = this.values();
-			Class<?> componentType = resultClass.getComponentType();
-			int size = values.size();
-			Object[] array = new Object[size];
-			T newArray = (T) Array.newInstance(componentType, size);
+			final Collection<Json> values = this.values();
+			final Class<?> componentType = resultClass.getComponentType();
+			final int size = values.size();
+			final Object[] array = new Object[size];
+			final T newArray = (T) Array.newInstance(componentType, size);
 			int index = 0;
-			for (Json value : values) {
+			for (final Json value : values) {
 				array[index] = value.as(componentType);
 				++index;
 			}
@@ -416,12 +416,12 @@ public class JsonImplementation implements Json {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Json get(Object... keys) {
+	public Json get(final Object... keys) {
 		JsonImplementation current = this;
 		for (int index = 0; index < keys.length; ++index) {
-			Object key = keys[index];
+			final Object key = keys[index];
 			if (current.value instanceof Map) {
-				Map<String, JsonImplementation> map = (Map<String, JsonImplementation>) current.value;
+				final Map<String, JsonImplementation> map = (Map<String, JsonImplementation>) current.value;
 				current = map.get(key.toString());
 			} else if (current.value instanceof List) {
 				Integer valueIndex = null;
@@ -432,7 +432,7 @@ public class JsonImplementation implements Json {
 				} else {
 					throw new IllegalArgumentException("Key is not a Number or a String.");
 				}
-				List<JsonImplementation> list = (List<JsonImplementation>) current.value;
+				final List<JsonImplementation> list = (List<JsonImplementation>) current.value;
 				current = list.get(valueIndex);
 			} else {
 				throw new ClassCastException("JSON value is not an object or an array");
@@ -445,11 +445,11 @@ public class JsonImplementation implements Json {
 	@Override
 	public Set<String> keys() {
 		if (this.value instanceof Map) {
-			Map<String, Json> map = (Map<String, Json>) value;
+			final Map<String, Json> map = (Map<String, Json>) this.value;
 			return map.keySet();
 		} else if (this.value instanceof List) {
-			List<Json> list = (List<Json>) value;
-			Set<String> keySet = new HashSet<String>();
+			final List<Json> list = (List<Json>) this.value;
+			final Set<String> keySet = new HashSet<String>();
 			for (int i = 0; i < list.size(); ++i) {
 				keySet.add(Integer.toString(i));
 			}
@@ -463,10 +463,10 @@ public class JsonImplementation implements Json {
 	@Override
 	public Collection<Json> values() {
 		if (this.value instanceof Map) {
-			Map<String, Json> map = (Map<String, Json>) value;
+			final Map<String, Json> map = (Map<String, Json>) this.value;
 			return map.values();
 		} else if (this.value instanceof List) {
-			List<Json> list = (List<Json>) value;
+			final List<Json> list = (List<Json>) this.value;
 			return list;
 		} else {
 			throw new ClassCastException("JSON value is not an object or an array");

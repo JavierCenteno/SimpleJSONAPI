@@ -18,11 +18,11 @@ import api.JsonReader;
 
 /**
  * A Reader to read JSON values from a Stream.
- * 
+ *
  * @author Javier Centeno Vega <jacenve@telefonica.net>
  * @version 1.0
  * @since 1.0
- * 
+ *
  */
 public class JsonReaderImplementation implements JsonReader {
 
@@ -76,7 +76,7 @@ public class JsonReaderImplementation implements JsonReader {
 	/**
 	 * The Reader this JsonReader is based on.
 	 */
-	private Reader reader;
+	private final Reader reader;
 	/**
 	 * A single character buffer for the current character.
 	 */
@@ -95,13 +95,13 @@ public class JsonReaderImplementation implements JsonReader {
 
 	/**
 	 * Constructs a JsonReader from the given Reader.
-	 * 
+	 *
 	 * @param reader
 	 *                   A Reader to read JSON data from.
 	 * @throws IOException
 	 *                         If an I/O error occurs.
 	 */
-	public JsonReaderImplementation(Reader reader) throws IOException {
+	public JsonReaderImplementation(final Reader reader) throws IOException {
 		this.reader = reader;
 		this.current = reader.read();
 		this.row = 1;
@@ -111,7 +111,7 @@ public class JsonReaderImplementation implements JsonReader {
 	/**
 	 * Constructs a JsonReader from the given InputStream by making a Reader from it
 	 * using the given Charset.
-	 * 
+	 *
 	 * @param inputStream
 	 *                        An InputStream to read JSON data from.
 	 * @param charset
@@ -120,32 +120,32 @@ public class JsonReaderImplementation implements JsonReader {
 	 * @throws IOException
 	 *                         If an I/O error occurs.
 	 */
-	public JsonReaderImplementation(InputStream inputStream, Charset charset) throws IOException {
+	public JsonReaderImplementation(final InputStream inputStream, final Charset charset) throws IOException {
 		this(new InputStreamReader(inputStream, charset));
 	}
 
 	/**
 	 * Constructs a JsonReader from the given InputStream by making a Reader from
 	 * it.
-	 * 
+	 *
 	 * @param inputStream
 	 *                        An InputStream to read JSON data from.
 	 * @throws IOException
 	 *                         If an I/O error occurs.
 	 */
-	public JsonReaderImplementation(InputStream inputStream) throws IOException {
+	public JsonReaderImplementation(final InputStream inputStream) throws IOException {
 		this(new InputStreamReader(inputStream));
 	}
 
 	/**
 	 * Constructs a JsonReader from the given String by making a Reader from it.
-	 * 
+	 *
 	 * @param string
 	 *                   A String to parse JSON data from.
 	 * @throws IOException
 	 *                         If an I/O error occurs.
 	 */
-	public JsonReaderImplementation(String string) throws IOException {
+	public JsonReaderImplementation(final String string) throws IOException {
 		this(new ByteArrayInputStream(string.getBytes()));
 	}
 
@@ -157,7 +157,7 @@ public class JsonReaderImplementation implements JsonReader {
 	 * '0' to '9' are turned into the integers 0 to 9 and characters in the range
 	 * 'a' to 'f' or 'A' to 'F' are turned into the integers 10 to 15. Any other
 	 * character causes an IllegalArgumentException.
-	 * 
+	 *
 	 * @param character
 	 *                      An hexadecimal character which must be between '0' and
 	 *                      '9', 'a' and 'f' or 'A' and 'F'.
@@ -166,12 +166,12 @@ public class JsonReaderImplementation implements JsonReader {
 	 *                                      If the character is not a valid
 	 *                                      hexadecimal character.
 	 */
-	private static int hexadecimalToInteger(char character) {
-		if ('0' <= character && character <= '9') {
+	private static int hexadecimalToInteger(final char character) {
+		if (('0' <= character) && (character <= '9')) {
 			return character - '0';
-		} else if ('a' <= character && character <= 'f') {
+		} else if (('a' <= character) && (character <= 'f')) {
 			return character - 87;// 87 == 'a' - 10
-		} else if ('A' <= character && character <= 'F') {
+		} else if (('A' <= character) && (character <= 'F')) {
 			return character - 55;// 55 == 'A' - 10
 		}
 		throw new IllegalArgumentException("Character \'" + character + "\' is not an hexadecimal character.");
@@ -183,21 +183,21 @@ public class JsonReaderImplementation implements JsonReader {
 	/**
 	 * Creates an IllegalArgumentException warning of an unexpected character with
 	 * the given String in the message as the characters that would be expected.
-	 * 
+	 *
 	 * @param expectedCharacters
 	 *                               A list of expected characters to be in the
 	 *                               message.
 	 * @return An IllegalArgumentException warning of an unexpected character.
 	 */
-	private IllegalArgumentException unexpectedCharacter(String expectedCharacters) {
-		return new IllegalArgumentException("JSON parsing error near column:" + column + ", row:" + row + "; Expected "
-				+ expectedCharacters + ", got \'" + (char) peek() + "\' instead");
+	private IllegalArgumentException unexpectedCharacter(final String expectedCharacters) {
+		return new IllegalArgumentException("JSON parsing error near column:" + this.column + ", row:" + this.row
+				+ "; Expected " + expectedCharacters + ", got \'" + (char) this.peek() + "\' instead");
 	}
 
 	/**
 	 * Checks if the current character matches the given character, then pops.
 	 * Throws an IllegalArgumentException if they don't match.
-	 * 
+	 *
 	 * @param character
 	 *                      A character to compare to the current character.
 	 * @throws IllegalArgumentException
@@ -206,56 +206,56 @@ public class JsonReaderImplementation implements JsonReader {
 	 * @throws IOException
 	 *                                      If an I/O error occurs.
 	 */
-	private void check(int character) throws IOException {
-		if (peek() != character) {
-			throw unexpectedCharacter("\'" + (char) character + "\'");
+	private void check(final int character) throws IOException {
+		if (this.peek() != character) {
+			throw this.unexpectedCharacter("\'" + (char) character + "\'");
 		}
-		pop();
+		this.pop();
 	}
 
 	/**
 	 * Get the current character from the Reader without advancing.
-	 * 
+	 *
 	 * @return The current character from the Reader.
 	 */
 	private int peek() {
-		return current;
+		return this.current;
 	}
 
 	/**
 	 * Get the current character from the Reader and advance to the next one.
-	 * 
+	 *
 	 * @return The current character from the Reader.
 	 * @throws IOException
 	 *                         If an I/O error occurs.
 	 */
 	private int pop() throws IOException {
-		int previous = this.current;
-		this.current = reader.read();
-		if (current == '\n') {
-			row = 1;
-			++column;
+		final int previous = this.current;
+		this.current = this.reader.read();
+		if (this.current == '\n') {
+			this.row = 1;
+			++this.column;
 		} else {
-			++row;
+			++this.row;
 		}
 		return previous;
 	}
 
 	/**
 	 * Pops for as long as there are whitespace characters.
-	 * 
+	 *
 	 * @throws IOException
 	 *                         If an I/O error occurs.
 	 */
 	private void consumeWhitespace() throws IOException {
-		while (Character.isWhitespace(peek())) {
-			pop();
+		while (Character.isWhitespace(this.peek())) {
+			this.pop();
 		}
 	}
 
 	/**
 	 * Reads the next JSON object.
-	 * 
+	 *
 	 * @return The next JSON object.
 	 * @throws IllegalArgumentException
 	 *                                      If an unexpected character is found.
@@ -263,27 +263,27 @@ public class JsonReaderImplementation implements JsonReader {
 	 *                                      If an I/O error occurs.
 	 */
 	private Json readObject() throws IOException {
-		consumeWhitespace();
-		check('{');
-		Map<String, Json> map = new HashMap<>();
-		consumeWhitespace();
-		if (peek() == '}') {
-			pop();
+		this.consumeWhitespace();
+		this.check('{');
+		final Map<String, Json> map = new HashMap<>();
+		this.consumeWhitespace();
+		if (this.peek() == '}') {
+			this.pop();
 		} else {
 			while (true) {
-				String key = this.readString();
-				consumeWhitespace();
-				check(':');
-				Json value = this.readValue();
-				consumeWhitespace();
+				final String key = this.readString();
+				this.consumeWhitespace();
+				this.check(':');
+				final Json value = this.readValue();
+				this.consumeWhitespace();
 				map.put(key, value);
-				if (peek() == ',') {
-					pop();
-				} else if (peek() == '}') {
-					pop();
+				if (this.peek() == ',') {
+					this.pop();
+				} else if (this.peek() == '}') {
+					this.pop();
 					break;
 				} else {
-					throw unexpectedCharacter("\',\' or \'}\'");
+					throw this.unexpectedCharacter("\',\' or \'}\'");
 				}
 			}
 		}
@@ -292,7 +292,7 @@ public class JsonReaderImplementation implements JsonReader {
 
 	/**
 	 * Reads the next JSON array.
-	 * 
+	 *
 	 * @return The next JSON array.
 	 * @throws IllegalArgumentException
 	 *                                      If an unexpected character is found.
@@ -300,23 +300,23 @@ public class JsonReaderImplementation implements JsonReader {
 	 *                                      If an I/O error occurs.
 	 */
 	private Json readArray() throws IOException {
-		check('[');
-		List<Json> list = new ArrayList<>();
-		consumeWhitespace();
-		if (peek() == ']') {
-			pop();
+		this.check('[');
+		final List<Json> list = new ArrayList<>();
+		this.consumeWhitespace();
+		if (this.peek() == ']') {
+			this.pop();
 		} else {
 			while (true) {
-				Json value = this.readValue();
-				consumeWhitespace();
+				final Json value = this.readValue();
+				this.consumeWhitespace();
 				list.add(value);
-				if (peek() == ',') {
-					pop();
-				} else if (peek() == ']') {
-					pop();
+				if (this.peek() == ',') {
+					this.pop();
+				} else if (this.peek() == ']') {
+					this.pop();
 					break;
 				} else {
-					throw unexpectedCharacter("\',\' or \']\'");
+					throw this.unexpectedCharacter("\',\' or \']\'");
 				}
 			}
 		}
@@ -325,7 +325,7 @@ public class JsonReaderImplementation implements JsonReader {
 
 	/**
 	 * Reads the next JSON string.
-	 * 
+	 *
 	 * @return The next JSON string.
 	 * @throws IllegalArgumentException
 	 *                                      If an unexpected character is found.
@@ -333,13 +333,13 @@ public class JsonReaderImplementation implements JsonReader {
 	 *                                      If an I/O error occurs.
 	 */
 	private String readString() throws IOException {
-		consumeWhitespace();
-		check('\"');
-		StringBuilder stringBuilder = new StringBuilder();
-		while (peek() != '\"') {
-			if (peek() == '\\') {
-				pop();
-				switch (pop()) {
+		this.consumeWhitespace();
+		this.check('\"');
+		final StringBuilder stringBuilder = new StringBuilder();
+		while (this.peek() != '\"') {
+			if (this.peek() == '\\') {
+				this.pop();
+				switch (this.pop()) {
 				case '\"':
 					stringBuilder.append('\"');
 					break;
@@ -366,24 +366,24 @@ public class JsonReaderImplementation implements JsonReader {
 					break;
 				case 'u':
 					int unescaped = 0;
-					unescaped |= hexadecimalToInteger((char) pop()) << 12;
-					unescaped |= hexadecimalToInteger((char) pop()) << 8;
-					unescaped |= hexadecimalToInteger((char) pop()) << 4;
-					unescaped |= hexadecimalToInteger((char) pop());
+					unescaped |= JsonReaderImplementation.hexadecimalToInteger((char) this.pop()) << 12;
+					unescaped |= JsonReaderImplementation.hexadecimalToInteger((char) this.pop()) << 8;
+					unescaped |= JsonReaderImplementation.hexadecimalToInteger((char) this.pop()) << 4;
+					unescaped |= JsonReaderImplementation.hexadecimalToInteger((char) this.pop());
 					stringBuilder.append((char) unescaped);
 					break;
 				}
 			} else {
-				stringBuilder.append((char) pop());
+				stringBuilder.append((char) this.pop());
 			}
 		}
-		check('\"');
+		this.check('\"');
 		return stringBuilder.toString();
 	}
 
 	/**
 	 * Reads the next JSON number.
-	 * 
+	 *
 	 * @return The next JSON number.
 	 * @throws IllegalArgumentException
 	 *                                      If an unexpected character is found.
@@ -391,42 +391,46 @@ public class JsonReaderImplementation implements JsonReader {
 	 *                                      If an I/O error occurs.
 	 */
 	private Json readNumber() throws IOException {
-		consumeWhitespace();
-		StringBuilder stringBuilder = new StringBuilder();
+		this.consumeWhitespace();
+		final StringBuilder stringBuilder = new StringBuilder();
 		boolean isWhole = true;
-		if (peek() == '-') {
-			stringBuilder.append((char) pop());
+		if (this.peek() == '-') {
+			stringBuilder.append((char) this.pop());
 		}
-		while ('0' <= peek() && peek() <= '9') {
-			stringBuilder.append((char) pop());
+		while (('0' <= this.peek()) && (this.peek() <= '9')) {
+			stringBuilder.append((char) this.pop());
 		}
-		if (peek() == '.') {
-			stringBuilder.append((char) pop());
+		if (this.peek() == '.') {
+			stringBuilder.append((char) this.pop());
 			isWhole = false;
-			while ('0' <= peek() && peek() <= '9') {
-				stringBuilder.append((char) pop());
+			while (('0' <= this.peek()) && (this.peek() <= '9')) {
+				stringBuilder.append((char) this.pop());
 			}
 		}
-		if (peek() == 'e' || peek() == 'E') {
-			stringBuilder.append((char) pop());
+		if ((this.peek() == 'e') || (this.peek() == 'E')) {
+			stringBuilder.append((char) this.pop());
 			isWhole = false;
-			if (peek() == '-' || peek() == '+') {
-				stringBuilder.append((char) pop());
+			if ((this.peek() == '-') || (this.peek() == '+')) {
+				stringBuilder.append((char) this.pop());
 			}
-			while ('0' <= peek() && peek() <= '9') {
-				stringBuilder.append((char) pop());
+			while (('0' <= this.peek()) && (this.peek() <= '9')) {
+				stringBuilder.append((char) this.pop());
 			}
 		}
 		Number number;
 		if (isWhole) {
-			BigInteger result = new BigInteger(stringBuilder.toString());
-			if (result.compareTo(MIN_BYTE_VALUE) >= 0 && 0 >= result.compareTo(MAX_BYTE_VALUE)) {
+			final BigInteger result = new BigInteger(stringBuilder.toString());
+			if ((result.compareTo(JsonReaderImplementation.MIN_BYTE_VALUE) >= 0)
+					&& (0 >= result.compareTo(JsonReaderImplementation.MAX_BYTE_VALUE))) {
 				number = Byte.valueOf(result.byteValue());
-			} else if (result.compareTo(MIN_SHORT_VALUE) >= 0 && 0 >= result.compareTo(MAX_SHORT_VALUE)) {
+			} else if ((result.compareTo(JsonReaderImplementation.MIN_SHORT_VALUE) >= 0)
+					&& (0 >= result.compareTo(JsonReaderImplementation.MAX_SHORT_VALUE))) {
 				number = Short.valueOf(result.shortValue());
-			} else if (result.compareTo(MIN_INTEGER_VALUE) >= 0 && 0 >= result.compareTo(MAX_INTEGER_VALUE)) {
+			} else if ((result.compareTo(JsonReaderImplementation.MIN_INTEGER_VALUE) >= 0)
+					&& (0 >= result.compareTo(JsonReaderImplementation.MAX_INTEGER_VALUE))) {
 				number = Integer.valueOf(result.intValue());
-			} else if (result.compareTo(MIN_LONG_VALUE) >= 0 && 0 >= result.compareTo(MAX_LONG_VALUE)) {
+			} else if ((result.compareTo(JsonReaderImplementation.MIN_LONG_VALUE) >= 0)
+					&& (0 >= result.compareTo(JsonReaderImplementation.MAX_LONG_VALUE))) {
 				number = Long.valueOf(result.longValue());
 			} else {
 				number = result;
@@ -439,7 +443,7 @@ public class JsonReaderImplementation implements JsonReader {
 
 	/**
 	 * Reads the next JSON boolean with true value.
-	 * 
+	 *
 	 * @return The next JSON boolean with true value.
 	 * @throws IllegalArgumentException
 	 *                                      If an unexpected character is found.
@@ -447,17 +451,17 @@ public class JsonReaderImplementation implements JsonReader {
 	 *                                      If an I/O error occurs.
 	 */
 	private Json readTrue() throws IOException {
-		consumeWhitespace();
-		check('t');
-		check('r');
-		check('u');
-		check('e');
+		this.consumeWhitespace();
+		this.check('t');
+		this.check('r');
+		this.check('u');
+		this.check('e');
 		return new JsonImplementation(Boolean.TRUE);
 	}
 
 	/**
 	 * Reads the next JSON boolean with false value.
-	 * 
+	 *
 	 * @return The next JSON boolean with false value.
 	 * @throws IllegalArgumentException
 	 *                                      If an unexpected character is found.
@@ -465,18 +469,18 @@ public class JsonReaderImplementation implements JsonReader {
 	 *                                      If an I/O error occurs.
 	 */
 	private Json readFalse() throws IOException {
-		consumeWhitespace();
-		check('f');
-		check('a');
-		check('l');
-		check('s');
-		check('e');
+		this.consumeWhitespace();
+		this.check('f');
+		this.check('a');
+		this.check('l');
+		this.check('s');
+		this.check('e');
 		return new JsonImplementation(Boolean.FALSE);
 	}
 
 	/**
 	 * Reads the next JSON null.
-	 * 
+	 *
 	 * @return The next JSON null.
 	 * @throws IllegalArgumentException
 	 *                                      If an unexpected character is found.
@@ -484,17 +488,17 @@ public class JsonReaderImplementation implements JsonReader {
 	 *                                      If an I/O error occurs.
 	 */
 	private Json readNull() throws IOException {
-		consumeWhitespace();
-		check('n');
-		check('u');
-		check('l');
-		check('l');
+		this.consumeWhitespace();
+		this.check('n');
+		this.check('u');
+		this.check('l');
+		this.check('l');
 		return new JsonImplementation(null);
 	}
 
 	/**
 	 * Reads the next JSON value.
-	 * 
+	 *
 	 * @return The next JSON value.
 	 * @throws IllegalArgumentException
 	 *                                      If an unexpected character is found.
@@ -502,20 +506,20 @@ public class JsonReaderImplementation implements JsonReader {
 	 *                                      If an I/O error occurs.
 	 */
 	private Json readValue() throws IOException {
-		consumeWhitespace();
-		switch (peek()) {
+		this.consumeWhitespace();
+		switch (this.peek()) {
 		case '{':
-			return readObject();
+			return this.readObject();
 		case '[':
-			return readArray();
+			return this.readArray();
 		case '\"':
-			return new JsonImplementation(readString());
+			return new JsonImplementation(this.readString());
 		case 't':
-			return readTrue();
+			return this.readTrue();
 		case 'f':
-			return readFalse();
+			return this.readFalse();
 		case 'n':
-			return readNull();
+			return this.readNull();
 		case '0':
 		case '1':
 		case '2':
@@ -527,15 +531,15 @@ public class JsonReaderImplementation implements JsonReader {
 		case '8':
 		case '9':
 		case '-':
-			return readNumber();
+			return this.readNumber();
 		default:
-			throw unexpectedCharacter("\'{\', \'[\', \'t\', \'f\', \'n\', \'-\' or DIGIT");
+			throw this.unexpectedCharacter("\'{\', \'[\', \'t\', \'f\', \'n\', \'-\' or DIGIT");
 		}
 	}
 
 	/**
 	 * Reads the next JSON structure.
-	 * 
+	 *
 	 * @return The next JSON structure.
 	 * @throws IllegalArgumentException
 	 *                                      If an unexpected character is found.
@@ -543,20 +547,20 @@ public class JsonReaderImplementation implements JsonReader {
 	 *                                      If an I/O error occurs.
 	 */
 	private Json readStructure() throws IOException {
-		consumeWhitespace();
-		switch (peek()) {
+		this.consumeWhitespace();
+		switch (this.peek()) {
 		case '{':
-			return readObject();
+			return this.readObject();
 		case '[':
-			return readArray();
+			return this.readArray();
 		default:
-			throw unexpectedCharacter("not \'{\' or \'[\'");
+			throw this.unexpectedCharacter("not \'{\' or \'[\'");
 		}
 	}
 
 	@Override
 	public Json read() throws IOException {
-		return readStructure();
+		return this.readStructure();
 	}
 
 }
